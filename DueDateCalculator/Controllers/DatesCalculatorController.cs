@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DueDateCalculator.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,16 @@ namespace DueDateCalculator.Controllers
     [ApiController]
     public class DatesCalculatorController : ControllerBase
     {
+        private readonly CalculateDateService _calculateDateService;
+
+        public DatesCalculatorController()
+        {
+            _calculateDateService = new CalculateDateService();
+        }
         [HttpGet]
         public DateTime GetEndDate(DateTime startDate, int daysOfComplete)
         {
-            DateTime endDate = new DateTime(2022, 8, 19);
+            DateTime endDate = _calculateDateService.CalculateEndDate(startDate, daysOfComplete);
             return endDate;
         }
     }

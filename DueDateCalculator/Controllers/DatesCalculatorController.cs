@@ -19,9 +19,9 @@ namespace DueDateCalculator.Controllers
             _calculateDateService = new CalculateDateService();
         }
         [HttpGet]
-        public string GetEndDate(DateTime taskStartDate, int daysOfComplete)
+        public string GetEndDate(DateTime startDate, int daysOfComplete)
         {
-            var endDate = _calculateDateService.CalculateEndDate(taskStartDate, daysOfComplete);
+            var endDate = _calculateDateService.CalculateEndDate(startDate, daysOfComplete);
             return endDate;
         }
     }

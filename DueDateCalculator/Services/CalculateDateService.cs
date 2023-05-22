@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace DueDateCalculator.Services
 {
     public class CalculateDateService
     {
-        public DateTime CalculateEndDate(DateTime startDate, int workingDays)
+        public string  CalculateEndDate(DateTime startDate, int workingDays)
         {
             string taskStartDate = startDate.ToString("dd/MM/yyyy");
             DateTime splitedTaskStartDate = DateTime.ParseExact(taskStartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -29,7 +30,10 @@ namespace DueDateCalculator.Services
                 }
                 totalDays++;
             }
-            return modifiedTaskStartDate;
+            var result = new { endDate = modifiedTaskStartDate.ToString("dd/MM/yyyy") };
+            string jsonResult = JsonConvert.SerializeObject(result);
+
+            return jsonResult;
         }
     }
 }

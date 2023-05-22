@@ -14,31 +14,34 @@ namespace DueDateCalculator.Services
             string jsonResult = string.Empty;
             try
             {
-                string taskStartDate = startDate.ToString("dd/MM/yyyy");
-                DateTime splitedTaskStartDate = DateTime.ParseExact(taskStartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
-
-                DateTime modifiedTaskStartDate = new DateTime(splitedTaskStartDate.Year, splitedTaskStartDate.Month, splitedTaskStartDate.Day);
-                List<DateTime> holidayDates = new List<DateTime>
+                if(startDate != DateTime.MinValue)
                 {
-                new DateTime(2022, 8, 23)
-                 };
+                    string taskStartDate = startDate.ToString("dd/MM/yyyy");
+                    DateTime splitedTaskStartDate = DateTime.ParseExact(taskStartDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-                int totalDays = 0;
-                while (workingDays > 0)
-                {
-                    modifiedTaskStartDate = modifiedTaskStartDate.AddDays(1);
-                    if (modifiedTaskStartDate.DayOfWeek != DayOfWeek.Saturday && modifiedTaskStartDate.DayOfWeek != DayOfWeek.Sunday && !holidayDates.Contains(startDate.Date))
+                    DateTime modifiedTaskStartDate = new DateTime(splitedTaskStartDate.Year, splitedTaskStartDate.Month, splitedTaskStartDate.Day);
+                    List<DateTime> holidayDates = new List<DateTime>
                     {
-                        workingDays--;
+                      new DateTime(2022, 8, 23)
+                    };
+
+                    int totalDays = 0;
+                    while (workingDays > 0)
+                    {
+                        modifiedTaskStartDate = modifiedTaskStartDate.AddDays(1);
+                        if (modifiedTaskStartDate.DayOfWeek != DayOfWeek.Saturday && modifiedTaskStartDate.DayOfWeek != DayOfWeek.Sunday && !holidayDates.Contains(startDate.Date))
+                        {
+                            workingDays--;
+                        }
+                        totalDays++;
                     }
-                    totalDays++;
-                }
-                var result = new { endDate = modifiedTaskStartDate.ToString("dd/MM/yyyy") };
-                jsonResult = JsonConvert.SerializeObject(result);
+                    var result = new { endDate = modifiedTaskStartDate.ToString("dd/MM/yyyy") };
+                    jsonResult = JsonConvert.SerializeObject(result);
+                }               
             }
             catch(Exception)
             {
-                return "Error: Unable to calculate the end date.";
+                return "Error: Unable to calculate the due date.Please check inputs";
             }
             return jsonResult;
         }
